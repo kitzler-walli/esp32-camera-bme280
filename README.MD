@@ -3,6 +3,11 @@ TTGO-Camera
 
 ![pic](image/1.jpg)
 
+3D Printed Case
+===============
+
+[TTGO-Camera with buttons](https://www.thingiverse.com/thing:3413796) I designed this case for this model and I find it very nice to protect the board. Buttons need sanding and also a bit of lubricant to work nicely.
+
 - Now Arduino officially supports the camera, you need to update the Arduino to the latest, see [arduino-esp32](https://github.com/espressif/arduino-esp32/releases) 
 Note: This is my humble try to make a hackeable and modificable esp32 Camera using ARDUINO as a framework but with the official Espressif Camera Libraries. In another step to understand more how IOT dev. Famework integrates
   
