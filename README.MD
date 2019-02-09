@@ -3,11 +3,16 @@ TTGO-Camera
 
 ![pic](image/1.jpg)
 
-- Now Arduino officially supports the camera, you need to update the Arduino to the latest, see [arduino-esp32](https://github.com/espressif/arduino-esp32/releases) for details.I am using the `1.0.1rc2` version when writing this code.
+- Now Arduino officially supports the camera, you need to update the Arduino to the latest, see [arduino-esp32](https://github.com/espressif/arduino-esp32/releases) 
+Note: This is my humble try to make a hackeable and modificable esp32 Camera using ARDUINO as a framework but with the official Espressif Camera Libraries. In another step to understand more how IOT dev. Famework integrates
   
 - In order to support BME280, I will use [Adafruit_BME280_Library](https://github.com/adafruit/Adafruit_BME280_Library), but this library conflicts with <esp_camera.h> and enters [Adafruit_BME280_Library](https://github.com/adafruit/Adafruit_BME280_Library) In Adafruit_BME280_Library change <Adafruit_BME280.h> --> 29 lines comment #include <Adafruit_Sensor.h>, BME280 this library does not use this header file, so comment out and no problem
 
+NOTE: Trying to find a bme280 library replacement that will not conflict.
+
 - OLED requires [esp8266-oled-ssd1306](https://github.com/ThingPulse/esp8266-oled-ssd1306) library support
+
+Maybe u8g2 will be a great replacement for this
   
 - Buttons require [OneButton](https://github.com/mathertel/OneButton) library support
 
@@ -31,17 +36,19 @@ TTGO-Camera
 | SIOC  | 12     |
 | RESET | No use |
 
+Not about Camera could not make it work at the frequency in this repository, put it at half and worked (maybe chip speed config? Dont think so need to research more)
+
 ## Sensor & OLED
 | Name | Num |
 | ---- | --- |
 | SDA  | 21  |
-| SCL  | 22  |
+| SCL  | 22  | Working perfectly
 
 ## Other
 | Name   | Num |
 | ------ | --- |
 | Button | 34  |
-| PIR    | 33  |
+| PIR    | 33  | Pir works out the box
 
 * BUTTON Click: Reverse camera ~~Currently the camera reverse color will not be normal, see [issues#9](https://github.com/espressif/esp32-camera/issues/9)~~
 
