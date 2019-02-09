@@ -1,7 +1,7 @@
 TTGO-Camera with BME280 and Pir sensor
 ======================================
 
-![TTGO-Camera image](schematic/TTGO-T-camera-bme280.jpg| width=100)
+![pic](schematic/TTGO-T-camera-bme280.jpg)
 
 3D Printed Case
 ===============
