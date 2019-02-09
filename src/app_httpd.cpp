@@ -15,7 +15,6 @@
 #include "esp_timer.h"
 #include "esp_camera.h"
 #include "img_converters.h"
-#include "camera_index.h"
 #include "Arduino.h"
 #include "FS.h"
 #include "SPIFFS.h"
@@ -305,8 +304,6 @@ static esp_err_t status_handler(httpd_req_t *req){
 
 static esp_err_t index_handler(httpd_req_t *req){
     SPIFFS.begin();
-    // httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
-
     // Update this to read the template from the SPIFFS
     String webTemplate = "";
     String templateFilename = "/camera_index.html";
@@ -317,7 +314,7 @@ static esp_err_t index_handler(httpd_req_t *req){
             webTemplate += file.readStringUntil('\n');  
         }
         file.close();
-        //Serial.print(webTemplate);
+        //Serial.print(webTemplate); // If loading template from SPIFFs does not work start debugging here.
     } else {
         Serial.println("Could not read "+templateFilename+" from SPIFFS. Done ? pio --target uploadfs");
     }
