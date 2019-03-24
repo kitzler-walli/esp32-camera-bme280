@@ -13,7 +13,6 @@ httpd_handle_t camera_httpd = NULL;
 //#define SOFTAP_MODE       //The comment will be connected to the specified ssid
 //#define ENABLE_BME280
 #define ENABLE_SLEEP
-#define ENABLE_IP5306
 
 #define WIFI_SSID   "KabelBox-A210"
 #define WIFI_PASSWD "14237187131701431551"
@@ -67,7 +66,6 @@ OneButton button1(BUTTON_1, true);
 
 char buff[128];
 
-#ifdef ENABLE_IP5306
 bool setPowerBoostKeepOn(int en)
 {
     Wire.beginTransmission(IP5306_ADDR);
@@ -78,7 +76,6 @@ bool setPowerBoostKeepOn(int en)
         Wire.write(0x35); // 0x37 is default reg value
     return Wire.endTransmission() == 0;
 }
-#endif
 
 void buttonClick()
 {
@@ -175,10 +172,7 @@ void setup()
 
     Wire.begin(I2C_SDA, I2C_SCL);
 
-#ifdef ENABLE_IP5306
-    bool   isOk = setPowerBoostKeepOn(1);
-    String info = "IP5306 KeepOn " + String((isOk ? "PASS" : "FAIL"));
-#endif
+
 
 #ifdef ENABLE_SSD1306
     oled.init();
@@ -188,16 +182,6 @@ void setup()
     delay(50);
     oled.drawString(x, y - 10, "TTGO Camera");
     oled.display();
-#endif
-
-#ifdef ENABLE_IP5306
-    delay(1000);
-    oled.setFont(ArialMT_Plain_10);
-    oled.clear();
-    oled.drawString(x, y - 10, info);
-    oled.display();
-    oled.setFont(ArialMT_Plain_16);
-    delay(1000);
 #endif
 
 #ifdef ENABLE_BME280
