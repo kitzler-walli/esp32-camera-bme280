@@ -372,10 +372,7 @@ void startCameraServer(){
 void loop()
 {
 #ifdef ENABLE_SSD1306
-    if (ui.update()) {
+    ui.update();
 #endif
-        button1.tick();
-#ifdef ENABLE_SSD1306
-    }
-#endif
+    button1.tick();
 }
