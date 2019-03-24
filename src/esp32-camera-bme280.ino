@@ -6,12 +6,14 @@
 #include <Wire.h>
 #include "esp_camera.h"
 #include "esp_wifi.h"
+#include "SparkFunBME280.h"
+
 httpd_handle_t stream_httpd = NULL;
 httpd_handle_t camera_httpd = NULL;
 
 #define ENABLE_SSD1306
 //#define SOFTAP_MODE       //The comment will be connected to the specified ssid
-//#define ENABLE_BME280
+#define ENABLE_BME280
 #define ENABLE_SLEEP
 
 #define WIFI_SSID   "KabelBox-A210"
@@ -57,7 +59,7 @@ OneButton button1(BUTTON_1, true);
 #ifdef ENABLE_BME280
 #define BEM280_ADDRESS 0X77
 #define SEALEVELPRESSURE_HPA (1013.25)
-//Adafruit_BME280 bme;
+    BME280 bme;
 #endif
 
 
@@ -65,17 +67,6 @@ OneButton button1(BUTTON_1, true);
 #define IP5306_REG_SYS_CTL0 0x00
 
 char buff[128];
-
-bool setPowerBoostKeepOn(int en)
-{
-    Wire.beginTransmission(IP5306_ADDR);
-    Wire.write(IP5306_REG_SYS_CTL0);
-    if (en)
-        Wire.write(0x37); // Set bit1: 1 enable 0 disable boost keep on
-    else
-        Wire.write(0x35); // 0x37 is default reg value
-    return Wire.endTransmission() == 0;
-}
 
 void buttonClick()
 {
@@ -141,17 +132,15 @@ void drawFrame2(OLEDDisplay *display, OLEDDisplayUiState *state, int16_t x, int1
 
     if (millis() - lastMs > 2000) {
         lastMs   = millis();
-        temp     = "Temp:" + String(bme.readTemperature()) + " *C";
-        pressure = "Press:" + String(bme.readPressure() / 100.0F) + " hPa";
-        altitude = "Altitude:" + String(bme.readAltitude(SEALEVELPRESSURE_HPA)) + " m";
-        humidity = "Humidity:" + String(bme.readHumidity()) + " %";
+        temp     = "Temp:" + String(bme.readTempC()) + " C";
+        pressure = "Press:" + String(bme.readFloatPressure() / 100.0F) + " hPa";
+        humidity = "Humidity:" + String(bme.readFloatHumidity()) + " %";
     }
     display->setFont(ArialMT_Plain_16);
     display->setTextAlignment(TEXT_ALIGN_LEFT);
     display->drawString(0 + x, 0 + y, temp);
     display->drawString(0 + x, 16 + y, pressure);
-    display->drawString(0 + x, 32 + y, altitude);
-    display->drawString(0 + x, 48 + y, humidity);
+    display->drawString(0 + x, 32 + y, humidity);
 #endif
 }
 
@@ -170,10 +159,6 @@ void setup()
 
     pinMode(AS312_PIN, INPUT);
 
-    Wire.begin(I2C_SDA, I2C_SCL);
-
-
-
 #ifdef ENABLE_SSD1306
     oled.init();
     Wire.setClock(100000);  //! Reduce the speed and prevent the speed from being too high, causing the screen
@@ -184,12 +169,6 @@ void setup()
     oled.display();
 #endif
 
-#ifdef ENABLE_BME280
-    if (!bme.begin(BEM280_ADDRESS)) {
-        Serial.println("Could not find a valid BME280 sensor, check wiring!");
-        while (1);
-    }
-#endif
 
     if (!(evGroup = xEventGroupCreate())) {
         Serial.println("evGroup Fail");
@@ -294,6 +273,9 @@ void setup()
     Serial.print("Camera Ready! Use 'http://");
     Serial.print(ip);
     Serial.println("' to connect");
+
+   Wire.begin(I2C_SDA, I2C_SCL);
+   bme.beginI2C(Wire);
 }
 
 void startCameraServer(){
