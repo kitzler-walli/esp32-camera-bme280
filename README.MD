@@ -51,6 +51,8 @@ TTGO-Camera
 
 * PIR: Detecting human motion and will display the first screen
 
+## Companion projects 
+If you are interested in controlling addressable Leds with ESP32 and launching animations with short UDP commands check out our project [Remora](https://github.com/martinberlin/Remora)
 
 
 ## Test Video
