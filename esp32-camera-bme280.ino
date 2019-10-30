@@ -7,10 +7,10 @@
 #include "esp_wifi.h"
 
 
-#define ENABLE_SSD1306
-#define SOFTAP_MODE       //The comment will be connected to the specified ssid
-#define ENABLE_BME280
-#define ENABLE_SLEEP
+// #define ENABLE_SSD1306
+// #define SOFTAP_MODE       //The comment will be connected to the specified ssid
+// #define ENABLE_BME280
+// #define ENABLE_SLEEP
 #define ENABLE_IP5306
 
 #define WIFI_SSID   "your wifi ssid"
@@ -92,14 +92,17 @@ void buttonClick()
 
 void buttonLongPress()
 {
+#ifdef ENABLE_SSD1306
     int x = oled.getWidth() / 2;
     int y = oled.getHeight() / 2;
     ui.disableAutoTransition();
     oled.setTextAlignment(TEXT_ALIGN_CENTER);
     oled.setFont(ArialMT_Plain_10);
     oled.clear();
+#endif
 
 #ifdef ENABLE_SLEEP
+#ifdef ENABLE_SSD1306
     pinMode(PWDN_GPIO_NUM,PULLUP);
     digitalWrite(PWDN_GPIO_NUM, HIGH);
     oled.drawString(x, y, "Press again to wake up");
@@ -113,6 +116,7 @@ void buttonLongPress()
 
     esp_sleep_enable_ext0_wakeup((gpio_num_t )BUTTON_1, LOW);
     esp_deep_sleep_start();
+#endif
 #endif
 }
 
@@ -163,8 +167,10 @@ FrameCallback frames[] = {drawFrame1, drawFrame2};
 
 void setup()
 {
+#ifdef ENABLE_SSD1306
     int x = oled.getWidth() / 2;
     int y = oled.getHeight() / 2;
+#endif
 
     Serial.begin(115200);
     Serial.setDebugOutput(true);
@@ -190,6 +196,7 @@ void setup()
 #endif
 
 #ifdef ENABLE_IP5306
+#ifdef ENABLE_SSD1306
     delay(1000);
     oled.setFont(ArialMT_Plain_10);
     oled.clear();
@@ -197,6 +204,7 @@ void setup()
     oled.display();
     oled.setFont(ArialMT_Plain_16);
     delay(1000);
+#endif
 #endif
 
 #ifdef ENABLE_BME280
