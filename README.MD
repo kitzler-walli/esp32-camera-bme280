@@ -3,57 +3,19 @@ TTGO-Camera
 
 ![pic](image/1.jpg)
 
-- Now Arduino officially supports the camera, you need to update the Arduino to the latest, see [arduino-esp32](https://github.com/espressif/arduino-esp32/releases) for details.I am using the `1.0.1rc2` version when writing this code.
-  
-- In order to support BME280, I will use [Adafruit_BME280_Library](https://github.com/adafruit/Adafruit_BME280_Library), but this library conflicts with <esp_camera.h> and enters [Adafruit_BME280_Library](https://github.com/adafruit/Adafruit_BME280_Library) In Adafruit_BME280_Library change <Adafruit_BME280.h> --> 29 lines comment #include <Adafruit_Sensor.h>, BME280 this library does not use this header file, so comment out and no problem
+This fork of [martinberlin/esp32-camera-bme280](https://github.com/martinberlin/esp32-camera-bme280) is a trimmed down version of the camera interface with no display output or button interaction. (can be reenabled by removing the comments from line 10 to 13 in esp32-camera-bme280.ino).
 
-- OLED requires [esp8266-oled-ssd1306](https://github.com/ThingPulse/esp8266-oled-ssd1306) library support
-  
-- Buttons require [OneButton](https://github.com/mathertel/OneButton) library support
+## Installation instructions
+- Install [Arduino IDE](https://www.arduino.cc/en/main/software)
+- Go to preferences and add `https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json` into Additional Board Manager URLs field.
+- Open Boards Manager from Tools > Board menu and install esp32 platform.
+- Select `ESP32 Wrover Module` from Tools > Board menu.
+- Install necessary libraries from Tools > Manage libraries...
+    - OneButton by Matthias Hertel
+    - Adafruit BME280 Library by Adafruit
+    - ESP8266 and ESP32 Oled Driver for SSD1306 display by Daniel Eichhorn
+- In Adafruit_BME280_Library change <Adafruit_BME280.h> --> comment out `#include <Adafruit_Sensor.h>`. This library does not use this header file, so comment out and no problem.
 
-## TTGO CAM PINS
-| Name  | Num    |
-| ----- | ------ |
-| Y9    | 39     |
-| Y8    | 36     |
-| Y7    | 23     |
-| Y6    | 18     |
-| Y5    | 15     |
-| Y4    | 4      |
-| Y3    | 14     |
-| Y2    | 5      |
-| VSNC  | 27     |
-| HREF  | 25     |
-| PCLK  | 19     |
-| PWD   | 26     |
-| XCLK  | 32     |
-| SIOD  | 13     |
-| SIOC  | 12     |
-| RESET | No use |
-
-## Sensor & OLED
-| Name | Num |
-| ---- | --- |
-| SDA  | 21  |
-| SCL  | 22  |
-
-## Other
-| Name   | Num |
-| ------ | --- |
-| Button | 34  |
-| PIR    | 33  |
-
-* BUTTON Click: Reverse camera ~~Currently the camera reverse color will not be normal, see [issues#9](https://github.com/espressif/esp32-camera/issues/9)~~
-
-* BUTTON LongPress : Enter sleep Mode , Sleep current ~6.9mA
-  
-* RESET BUTTON: When the battery is powered, click to turn on the power
-
-* PIR: Detecting human motion and will display the first screen
-
-## Companion projects 
-If you are interested in controlling addressable Leds with ESP32 and launching animations with short UDP commands check out our project [Remora](https://github.com/martinberlin/Remora)
-
-
-## Test Video
-[YouTube](https://www.youtube.com/watch?v=CibcsmurTbo)
+## Special feature
+This library has a V-mirror option which is achieved by rotating the image in html via css (transform: rotate). This option is enabled by default in this version.
+I included the html sourcecode which is contained as gzip compressed byte array in camera_index.h.
